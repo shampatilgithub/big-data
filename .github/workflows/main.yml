@@ -41,7 +41,7 @@ jobs:
                 Role: "LabRole"
                 DefaultArguments:
                   "--job-language": "python"
-          env:
+        env:
           AWS_ACCESS_KEY_ID: ASIAUBM6XHT4JTAAXZ46
           AWS_SECRET_ACCESS_KEY: 9PatVK7osCP/OGaFuEf6dIzOlmclWZ9p2ohnjTK+
           AWS_DEFAULT_REGION: 'us-east-1'
