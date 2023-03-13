@@ -35,7 +35,7 @@ jobs:
                 Command:
                   Name: glueetl
                   PythonVersion: 3
-                  ScriptLocation: "updated-gluescript.py"
+                  ScriptLocation: "s3://big-data-project11/clean1/updated-gluescript.py"
                 Description: "This is a test job"
                 Name: my-glue-job
                 Role: "LabRole"
