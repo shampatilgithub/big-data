@@ -19,11 +19,10 @@ jobs:
         run: |
           aws s3 cp updated-gluescript.py s3://big-data-project11/clean1/
         env:
-          AWS_ACCESS_KEY_ID: ASIAUBM6XHT4JTAAXZ46
-          AWS_SECRET_ACCESS_KEY: 9PatVK7osCP/OGaFuEf6dIzOlmclWZ9p2ohnjTK+
+          AWS_ACCESS_KEY_ID: ASIAUBM6XHT4IJ7VDHNJ
+          AWS_SECRET_ACCESS_KEY: +jbXippadAe34KSG63h5a1xOP40RWkr7k93HuEFE
           AWS_DEFAULT_REGION: 'us-east-1'
-          AWS_SESSION_TOKEN: FwoGZXIvYXdzEMz//////////wEaDJGzu5KMHEKWMy914SLJAZOh8ES5+IH/s3j1QTFB8GD5VhgCtqA+e485asdlfAX7b2tq1jd7yLLIFxpTThismebVtFeVxnEQYCyl6NMcMqxFlnTxT7lX7ELqfV/zqydwE9De7uKuSNao0dh+lpdbIOGJHDjxsffY+ZoByLCc2BZ1vLTNGj+fIakzsvLYgT4IvB55gUgmYEoSKpTQiVj0SwQ3MzQ4NVcqXmXJpWe22JCfzwr0We+UNZNt2nuOoXy/Q2qIQoTH6whPgjIyxurvF8EdhYAKc+ZbpCiMhKygBjIt2OKwtd4omovb0qsYSHLD3SRZBxrrqGXblCKXmjng6S2yUfyVlI63MfiSVoYN
-      
+          AWS_SESSION_TOKEN: FwoGZXIvYXdzEBAaDOuf7YOemlNfJC3oGiLJAWSN/fjbGNsIZcq78vb67CldwU8MIbbrWqUPMB65VNqFPLtgbgey2zN6sSZifC4bN4azlDNy+5ApKGyp6K94ormEUvzvuhcLy2yrgpQrbcp4/F2ENuFO0UStyitb9IYjzUCIAyGycEhzgAHr2w4c3E13RZ1tx9yDF/gAtlg3O2XjfgNmQUAZF9aGbtr9rCZUHBDh750Dcktz3ILLj5807z1VuYweYE1EGgdcBdLif9UWYXjHYzlMysyEypqTI3UvLq5go3fZdCadWyi4g7ugBjItILkLynruyiakL9YuyArU4QsFpzMOidDKyOw2qILku8vM82CRKiRliFNTnTY+
       - uses: action/checkout@master
       - name: create glue job
         run:  |
@@ -42,11 +41,10 @@ jobs:
                 DefaultArguments:
                   "--job-language": "python"
         env:
-          AWS_ACCESS_KEY_ID: ASIAUBM6XHT4JTAAXZ46
-          AWS_SECRET_ACCESS_KEY: 9PatVK7osCP/OGaFuEf6dIzOlmclWZ9p2ohnjTK+
+          AWS_ACCESS_KEY_ID: ASIAUBM6XHT4IJ7VDHNJ
+          AWS_SECRET_ACCESS_KEY: +jbXippadAe34KSG63h5a1xOP40RWkr7k93HuEFE
           AWS_DEFAULT_REGION: 'us-east-1'
-          AWS_SESSION_TOKEN: FwoGZXIvYXdzEMz//////////wEaDJGzu5KMHEKWMy914SLJAZOh8ES5+IH/s3j1QTFB8GD5VhgCtqA+e485asdlfAX7b2tq1jd7yLLIFxpTThismebVtFeVxnEQYCyl6NMcMqxFlnTxT7lX7ELqfV/zqydwE9De7uKuSNao0dh+lpdbIOGJHDjxsffY+ZoByLCc2BZ1vLTNGj+fIakzsvLYgT4IvB55gUgmYEoSKpTQiVj0SwQ3MzQ4NVcqXmXJpWe22JCfzwr0We+UNZNt2nuOoXy/Q2qIQoTH6whPgjIyxurvF8EdhYAKc+ZbpCiMhKygBjIt2OKwtd4omovb0qsYSHLD3SRZBxrrqGXblCKXmjng6S2yUfyVlI63MfiSVoYN
-
+          AWS_SESSION_TOKEN: FwoGZXIvYXdzEBAaDOuf7YOemlNfJC3oGiLJAWSN/fjbGNsIZcq78vb67CldwU8MIbbrWqUPMB65VNqFPLtgbgey2zN6sSZifC4bN4azlDNy+5ApKGyp6K94ormEUvzvuhcLy2yrgpQrbcp4/F2ENuFO0UStyitb9IYjzUCIAyGycEhzgAHr2w4c3E13RZ1tx9yDF/gAtlg3O2XjfgNmQUAZF9aGbtr9rCZUHBDh750Dcktz3ILLj5807z1VuYweYE1EGgdcBdLif9UWYXjHYzlMysyEypqTI3UvLq5go3fZdCadWyi4g7ugBjItILkLynruyiakL9YuyArU4QsFpzMOidDKyOw2qILku8vM82CRKiRliFNTnTY+
         
 
 
