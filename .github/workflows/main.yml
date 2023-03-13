@@ -23,7 +23,8 @@ jobs:
           AWS_SECRET_ACCESS_KEY: 9PatVK7osCP/OGaFuEf6dIzOlmclWZ9p2ohnjTK+
           AWS_DEFAULT_REGION: 'us-east-1'
           AWS_SESSION_TOKEN: FwoGZXIvYXdzEMz//////////wEaDJGzu5KMHEKWMy914SLJAZOh8ES5+IH/s3j1QTFB8GD5VhgCtqA+e485asdlfAX7b2tq1jd7yLLIFxpTThismebVtFeVxnEQYCyl6NMcMqxFlnTxT7lX7ELqfV/zqydwE9De7uKuSNao0dh+lpdbIOGJHDjxsffY+ZoByLCc2BZ1vLTNGj+fIakzsvLYgT4IvB55gUgmYEoSKpTQiVj0SwQ3MzQ4NVcqXmXJpWe22JCfzwr0We+UNZNt2nuOoXy/Q2qIQoTH6whPgjIyxurvF8EdhYAKc+ZbpCiMhKygBjIt2OKwtd4omovb0qsYSHLD3SRZBxrrqGXblCKXmjng6S2yUfyVlI63MfiSVoYN
-
+      
+      - uses: action/checkout@master
       - name: create glue job
         run:  |
           Description: AWS Glue Job using GitHub Script
