@@ -1,0 +1,142 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: "aws glue job, glue trigger, glue workflow, glue crawler, s3 buckets creation test"
+Resources: 
+
+
+  DatabaseAirbnb:
+    Type: AWS::Glue::Database
+    Properties:
+      CatalogId: !Ref 'AWS::AccountId'
+      DatabaseInput:
+        Name: 'airbnbdatabase'
+        Description: "AWS Glue database create"
+
+  CrawlerAirbnb:
+    Type: AWS::Glue::Crawler
+    Properties:
+      Name: 'Airbnbcrawler'
+      Role: 'LabRole'
+      Description: 'AWS Glue crawler to crawl airbnb data'
+      DatabaseName: !Ref DatabaseAirbnb
+      Targets:
+        S3Targets:
+          - Path: "s3://airbnb-out-data/"
+      TablePrefix: 'cleanDataTable'
+      SchemaChangePolicy:
+        UpdateBehavior: "UPDATE_IN_DATABASE"
+        DeleteBehavior: "LOG"
+      Configuration: '{"Version":1.0}'
+
+  Airbnbinbucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      VersioningConfiguration:
+        Status: Enabled
+      BucketName: 'airbnb-in-data'
+      PublicAccessBlockConfiguration:
+          BlockPublicAcls: TRUE
+          BlockPublicPolicy: TRUE
+          IgnorePublicAcls: TRUE
+          RestrictPublicBuckets: TRUE
+      NotificationConfiguration:
+        LambdaConfigurations:
+          - Event: 's3:ObjectCreated:*'
+            Function: !GetAtt 
+              - workflowLambda
+              - Arn
+
+
+  Airbnboutbucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      VersioningConfiguration:
+        Status: Enabled
+      BucketName: 'airbnb-out-data'
+      PublicAccessBlockConfiguration:
+          BlockPublicAcls: TRUE
+          BlockPublicPolicy: TRUE
+          IgnorePublicAcls: TRUE
+          RestrictPublicBuckets: TRUE
+          
+  WorkflowJob:
+    Type: 'AWS::Glue::Job'   
+    Properties:
+      Role: 'LabRole'   
+      Command:   
+        Name: glueetl
+        ScriptLocation: !Sub 's3://tempairbnb/updated-gluescript.py'
+      AllocatedCapacity: 5  
+      ExecutionProperty:   
+        MaxConcurrentRuns: 2  
+      Name: 'cleaning-data'
+      GlueVersion: 3.0
+
+
+  workflowAirbnb:
+    Type: AWS::Glue::Workflow
+    Properties: 
+      Description: "workflow create"
+      MaxConcurrentRuns: 5
+      Name: "airbnbworkflow"
+
+  WorkflowStartTrigger:
+    Type: AWS::Glue::Trigger
+    Properties:
+      Name: 'StartTrigger'
+      Type: ON_DEMAND
+      Description: 'Trigger for starting the workflow'
+      Actions:
+        - JobName: !Ref WorkflowJob
+      WorkflowName: !Ref workflowAirbnb
+
+  ParquetJobTrigger:
+    Type: AWS::Glue::Trigger
+    Properties:
+      Name: 'JobSuccessfulTrigger'
+      Type: CONDITIONAL
+      StartOnCreation: TRUE
+      Description: 'Trigger to start the crawler'
+      Actions:
+        - CrawlerName: !Ref CrawlerAirbnb
+      Predicate:
+        Conditions:
+          - LogicalOperator: EQUALS
+            JobName: !Ref WorkflowJob
+            State: SUCCEEDED
+      WorkflowName: !Ref workflowAirbnb
+
+  workflowLambda:
+    Type: 'AWS::Lambda::Function'
+    Properties:
+      Code:
+        ZipFile: |
+          import json
+          import boto3
+
+          def lambda_handler(event, context):
+              glue = boto3.client('glue')
+              response = glue.start_workflow_run(Name='airbnbworkflow')
+              print(response)
+              return {
+                  'statusCode': 200,
+                  'body': json.dumps('Hello from Lambda!')
+              }    
+      Handler: index.lambda_handler
+      Role: 'arn:aws:iam::740104023532:role/LabRole'
+      Runtime: 'python3.8'
+      FunctionName: 'lambdaforworkflow'
+  
+  LambdaInvokePermission:
+    Type: 'AWS::Lambda::Permission'
+    Properties:
+      FunctionName: !Ref workflowLambda
+      Action: 'lambda:InvokeFunction'
+      Principal: s3.amazonaws.com
+      SourceAccount: !Ref 'AWS::AccountId'
+      SourceArn: !Sub arn:aws:s3:::airbnb-in-data
+
+
+
+
+
+
