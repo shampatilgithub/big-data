@@ -40,4 +40,4 @@ jobs:
 
       # Runs a  single commands using the runners shell
       - name: upload to s3
-        run: aws s3 cp s3://kbigdata/data/total_data.csv s3://airbnb-out11-data/
+        run: aws s3 cp s3://kbigdata/data/total_data.csv s3://airbnb-in11-data/
