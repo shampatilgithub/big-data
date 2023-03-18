@@ -1,59 +1,36 @@
-# This is a basic workflow to help you get started with Actions
-name: upload to s3
-# Controls when the action will run. 
-on:
-  # Triggers the workflow on push or pull request events but only for the main branch
-  # push:
-  #  branches: [ main ]
-# Allows you to run this workflow manually from the Actions tab
+name: 'Deploy to AWS CloudFormation'
+on: 
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+  # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-# This workflow contains a single job called "build"
-  build:
-# The type of runner that the job will run on
+  # This workflow contains a single job called "deploy"
+  deploy:
+    # The type of runner that the job will run on
     runs-on: ubuntu-latest
+    # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      - uses: actions/checkout@master
-      - name: upload to s3
-        run: |
-          aws s3 cp updated-gluescript.py s3://big-data-project11/clean1/
-        env:
-          AWS_ACCESS_KEY_ID: ASIAUBM6XHT4IJ7VDHNJ
-          AWS_SECRET_ACCESS_KEY: +jbXippadAe34KSG63h5a1xOP40RWkr7k93HuEFE
-          AWS_DEFAULT_REGION: 'us-east-1'
-          AWS_SESSION_TOKEN: FwoGZXIvYXdzEBAaDOuf7YOemlNfJC3oGiLJAWSN/fjbGNsIZcq78vb67CldwU8MIbbrWqUPMB65VNqFPLtgbgey2zN6sSZifC4bN4azlDNy+5ApKGyp6K94ormEUvzvuhcLy2yrgpQrbcp4/F2ENuFO0UStyitb9IYjzUCIAyGycEhzgAHr2w4c3E13RZ1tx9yDF/gAtlg3O2XjfgNmQUAZF9aGbtr9rCZUHBDh750Dcktz3ILLj5807z1VuYweYE1EGgdcBdLif9UWYXjHYzlMysyEypqTI3UvLq5go3fZdCadWyi4g7ugBjItILkLynruyiakL9YuyArU4QsFpzMOidDKyOw2qILku8vM82CRKiRliFNTnTY+
-      - uses: action/checkout@master
-      - name: create glue job
-        run:  |
-          Description: AWS Glue Job using GitHub Script
-          Resources:
-            MyJob:
-              Type: AWS::Glue::Job
-              Properties:
-                Command:
-                  Name: glueetl
-                  PythonVersion: 3
-                  ScriptLocation: "s3://big-data-project11/clean1/updated-gluescript.py"
-                Description: "This is a test job"
-                Name: my-glue-job
-                Role: "LabRole"
-                DefaultArguments:
-                  "--job-language": "python"
-        env:
-          AWS_ACCESS_KEY_ID: ASIAUBM6XHT4IJ7VDHNJ
-          AWS_SECRET_ACCESS_KEY: +jbXippadAe34KSG63h5a1xOP40RWkr7k93HuEFE
-          AWS_DEFAULT_REGION: 'us-east-1'
-          AWS_SESSION_TOKEN: FwoGZXIvYXdzEBAaDOuf7YOemlNfJC3oGiLJAWSN/fjbGNsIZcq78vb67CldwU8MIbbrWqUPMB65VNqFPLtgbgey2zN6sSZifC4bN4azlDNy+5ApKGyp6K94ormEUvzvuhcLy2yrgpQrbcp4/F2ENuFO0UStyitb9IYjzUCIAyGycEhzgAHr2w4c3E13RZ1tx9yDF/gAtlg3O2XjfgNmQUAZF9aGbtr9rCZUHBDh750Dcktz3ILLj5807z1VuYweYE1EGgdcBdLif9UWYXjHYzlMysyEypqTI3UvLq5go3fZdCadWyi4g7ugBjItILkLynruyiakL9YuyArU4QsFpzMOidDKyOw2qILku8vM82CRKiRliFNTnTY+
-        
+      - name: Checkout
+        uses: actions/checkout@v2
 
+      - name: Configure AWS credentials
+        id: creds
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ASIA2YUNDFXWBTSG6DWJ
+          aws-secret-access-key: 8RvEVJVkQ6NdjPhIVsKntqaBKmCIMaaHOuTGBQ2M
+          aws-session-token: FwoGZXIvYXdzECUaDLRL1FPbBO2CvmgHuyLFAa5dX2vcQD0CBxfztvR1soYJbDNWiA/IgOSS0iB7dP3Y95UYrV3yHEUbFy/hxTXFVYV7uD3X5d2Tlr2LKrVg4PetHq6odcnZPv2R19jTw3z5NLvK18uzI8YDEjISXK0cZHQr6lDK9vamzjNTM0PlYOAyC3i3/coXHgCAVQrga3DktRsDuZu3xBlTeiVAPgd0/tX3YhmXOsr54pPvf/zymbtj3gvusMxDnw/yY9gAKR+CQ9odpzvWcjyzgdG3HI6r1Fne8Gp3KIPdv6AGMi33mM/wqCsJs+cDyBvFTg1PbPIfo9Fc6+/b2pAuL12pt3SSXIJTRdvFfKIE10s=
+          aws-region: 'us-east-1' 
 
-           
-        
-    
-
-
-  
-
-
-
+      # Deploy to AWS CloudFormation
+      - name: Deploy to AWS CloudFormation
+        uses: aws-actions/aws-cloudformation-github-deploy@v1
+        with:
+          name: test-stack
+          template: Final-CFT.yml
+          no-fail-on-empty-changeset: "1"
+          
