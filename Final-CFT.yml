@@ -20,7 +20,7 @@ Resources:
       DatabaseName: !Ref DatabaseAirbnb
       Targets:
         S3Targets:
-          - Path: "s3://airbnb-out-data/"
+          - Path: "s3://airbnb-out11-data/"
       TablePrefix: 'cleanDataTable'
       SchemaChangePolicy:
         UpdateBehavior: "UPDATE_IN_DATABASE"
@@ -32,7 +32,7 @@ Resources:
     Properties:
       VersioningConfiguration:
         Status: Enabled
-      BucketName: 'airbnb-in-data'
+      BucketName: 'airbnb-in11-data'
       PublicAccessBlockConfiguration:
           BlockPublicAcls: TRUE
           BlockPublicPolicy: TRUE
@@ -51,7 +51,7 @@ Resources:
     Properties:
       VersioningConfiguration:
         Status: Enabled
-      BucketName: 'airbnb-out-data'
+      BucketName: 'airbnb-out11-data'
       PublicAccessBlockConfiguration:
           BlockPublicAcls: TRUE
           BlockPublicPolicy: TRUE
@@ -64,7 +64,7 @@ Resources:
       Role: 'LabRole'   
       Command:   
         Name: glueetl
-        ScriptLocation: !Sub 's3://tempairbnb/updated-gluescript.py'
+        ScriptLocation: !Sub 's3://big-data-project11/updated-gluescript.py'
       AllocatedCapacity: 5  
       ExecutionProperty:   
         MaxConcurrentRuns: 2  
@@ -122,7 +122,7 @@ Resources:
                   'body': json.dumps('Hello from Lambda!')
               }    
       Handler: index.lambda_handler
-      Role: 'arn:aws:iam::740104023532:role/LabRole'
+      Role: 'arn:aws:iam::277895134456:role/LabRole'
       Runtime: 'python3.8'
       FunctionName: 'lambdaforworkflow'
   
@@ -133,7 +133,7 @@ Resources:
       Action: 'lambda:InvokeFunction'
       Principal: s3.amazonaws.com
       SourceAccount: !Ref 'AWS::AccountId'
-      SourceArn: !Sub arn:aws:s3:::airbnb-in-data
+      SourceArn: !Sub arn:aws:s3:::airbnb-in11-data
 
 
 
